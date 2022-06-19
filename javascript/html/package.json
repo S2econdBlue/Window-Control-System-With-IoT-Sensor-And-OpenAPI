@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "mocha-jsdom": "^2.0.0"
+  }
+}

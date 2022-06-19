@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <title>currentWeather</title>
+</head>
+
+<body>
+
+    <header>
+
+    </header>
+
+    <section>
+
+        <button id="button">수동 API 로드</button>
+        <article>
+            <h1 id="clock" style="color:gray;">00:00</h1>
+            <p id='P1'></p>
+            <p id='P2'></p>
+            <p id='P3'></p>
+            <p id='P4'></p>
+            <p id='P5'></p>
+        </article>
+    </section>
+    <footer>
+
+    </footer>
+    <script>
+        //실시간 시간 표시하기
+        var clockTarget = document.getElementById("clock");
+        var date = new Date();
+        var minutes = date.getMinutes();
+        function clock() {
+            
+            var date = new Date();
+            // date Object를 받아오고 
+            var month = date.getMonth();
+
+            // 달을 받아옵니다 
+            var clockDate = date.getDate();
+
+            // 몇일인지 받아옵니다 
+            var day = date.getDay();
+
+            // 요일을 받아옵니다. 
+            var week = ['일', '월', '화', '수', '목', '금', '토'];
+
+            // 요일은 숫자형태로 리턴되기때문에 미리 배열을 만듭니다. 
+            var hours = date.getHours();
+
+            // 시간을 받아오고 
+            var minutes = date.getMinutes();
+
+            // 분도 받아옵니다.
+            var seconds = date.getSeconds();
+
+            // 초까지 받아온후 
+            clockTarget.innerText = `${month + 1}월 ${clockDate}일 ${week[day]}요일` + `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+
+            // 월은 0부터 1월이기때문에 +1일을 해주고 
+
+            // 시간 분 초는 한자리수이면 시계가 어색해보일까봐 10보다 작으면 앞에0을 붙혀주는 작업을 3항연산으로 했습니다. 
+        }
+
+
+        //API로 공공데이터 불러오기
+        const button = document.getElementById("button");
+        const header = document.querySelector('header');
+        const section = document.querySelector('section');
+        const footer = document.querySelector('footer');
+
+        const myPara1 = document.getElementById('P1');
+        const myPara2 = document.getElementById('P2');
+        const myPara3 = document.getElementById('P3');
+        const myPara4 = document.getElementById('P4');
+        const myPara5 = document.getElementById('P5');
+
+        var xhr = new XMLHttpRequest();
+        function weather_Check() {
+            xhr.open("GET", "main.php");
+            xhr.send();
+        }
+        function weather_Check_timely() {
+            if (minutes == 00 || minutes == 10 || minutes == 20 || minutes == 30 || minutes == 40 || minutes == 50 || minutes == 60) {
+                xhr.open("GET", "main.php");
+                xhr.send();
+            }
+        }
+        button.addEventListener('click', function show() {
+            xhr.open("GET", "main.php");
+            xhr.send();
+        });
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                console.log("\n정상적으로 응답 받음\n");
+            }
+        });
+        xhr.onload = function () {
+            let weather_data = xhr.response;
+            console.log("\n", "weather_data : ", weather_data, "\n");
+            let parsed_data = JSON.parse(weather_data);
+
+            currentWeather(parsed_data);
+        }
+        function currentWeather(obj) {
+            const item = obj.response.body.items.item;
+            for (var i = 0; i < item.length; i++) {
+
+                const obser_V = item[i].obsrValue;
+                const cat = item[i].category;
+                if (cat == "PTY") {
+                    if (obser_V == 0) {
+                        myPara1.innerHTML = '강수형태 : 비 안내림';
+                    }
+                    else if (obser_V == 1) {
+                        myPara1.innerHTML = '강수형태 : 비';
+                    }
+                    else if (obser_V == 2) {
+                        myPara1.innerHTML = '강수형태 : 강한 진눈깨비';
+                    }
+                    else if (obser_V == 3) {
+                        myPara1.innerHTML = '강수형태 : 눈';
+                    }
+                    else if (obser_V == 4) {
+                        myPara1.innerHTML = '강수형태 : 소나기';
+                    }
+                    else if (obser_V == 5) {
+                        myPara1.innerHTML = '강수형태 : 빗방울';
+                    }
+                    else if (obser_V == 6) {
+                        myPara1.innerHTML = '강수형태 : 약한 진눈깨비';
+                    }
+                    else if (obser_V == 7) {
+                        myPara1.innerHTML = '강수형태 : 눈날림';
+                    }
+                }
+                else if (cat == "REH") {
+                    myPara2.innerHTML = '습도 : ' + obser_V + '%';
+                }
+                else if (cat == "RN1") {
+                    myPara3.innerHTML = '1시간 강수량 : ' + obser_V + 'mm';
+                }
+                else if (cat == "T1H") {
+                    myPara4.innerHTML = '온도 : ' + obser_V + '℃';
+                }
+                else if (cat == "WSD") {
+                    myPara5.innerHTML = '풍속 : ' + obser_V + 'm/s';
+                }
+            }
+        }
+
+        function init() {
+            clock();
+            weather_Check();
+            // 최초에 함수를 한번 실행시켜주고 
+            setInterval(clock, 1000);
+            setInterval(weather_Check_timely, 20000); //1초마다 하면 트래픽 부족 우려. 59
+            // setInterval이라는 함수로 매초마다 실행을 해줍니다.
+            // setInterval은 첫번째 파라메터는 함수이고 두번째는 시간인데 밀리초단위로 받습니다. 1000 = 1초 
+        }
+        init();
+    </script>
+</body>
+
+</html>
