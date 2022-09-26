@@ -1,1 +1,0 @@
-http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst?ServiceKey=MZVaUPWHOFbsrQMtZXU8n5rCRvizs2l%2FkejesIzGvC%2FTdgCs8iRrgK%2B5%2FgMoCKrH9%2BZzIiPO5S0WlGnNAdki4A%3D%3D&pageNo=1&numOfRows=8&dataType=JSON&base_date=20210503&base_time=0006&nx=88&ny=89

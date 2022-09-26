@@ -1,0 +1,204 @@
+@import url(https://fonts.googleapis.com/css?family=Fjalla+One);
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: "Fjalla One", sans-serif;
+  background: linear-gradient(to bottom, #405166 0%, #656f6f 100%);
+}
+
+.title_container {
+  max-width:300px;
+  display: inline-block;
+}
+.inner_container{
+  width:1000px; 
+  margin-left: auto; 
+  margin-right: auto;
+}
+.button {
+    width : 200px;
+    text-align: center; 
+    margin:0 auto;
+
+  color: #e55643;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.button span {
+  transform: skew(-10deg);
+  text-shadow: #533d4a 1px 1px, #533d4a 2px 2px, #533d4a 3px 3px, #533d4a 4px 4px;
+}
+.reload_weather{
+  color: #3bdab2;
+  opacity: 0;
+}
+.reload_weather span{
+    cursor:default;
+    margin : 10px 0 10px 0;
+    transform: skew(-10deg);
+    text-shadow: #533d4a 1px 1px, #533d4a 2px 2px, #533d4a 3px 3px, #533d4a 4px 4px;
+}
+.reload_Air_Pollution{
+    color: #3bdab2;
+    opacity: 0;
+  }
+.reload_Air_Pollution span{
+    cursor:default;
+    margin : 10px 0 10px 0;
+    transform: skew(-10deg);
+    text-shadow: #533d4a 1px 1px, #533d4a 2px 2px, #533d4a 3px 3px, #533d4a 4px 4px;
+}
+.reload_Arduino{
+  color: #3bdab2;
+  opacity: 0;
+}
+.reload_Arduino span{
+  cursor:default;
+  margin : 10px 0 10px 0;
+  transform: skew(-10deg);
+  text-shadow: #533d4a 1px 1px, #533d4a 2px 2px, #533d4a 3px 3px, #533d4a 4px 4px;
+}
+.reload_Time{
+  color: #df527c;
+  opacity: 0;
+}
+.reload_Time span{
+  cursor:default;
+  margin : 10px 0 10px 0;
+  transform: skew(-10deg);
+  text-shadow: #533d4a 1px 1px, #533d4a 2px 2px, #533d4a 3px 3px, #533d4a 4px 4px;
+}
+h1{
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 42px;
+  margin: 0;
+  line-height: 47px;
+  letter-spacing: 2px;
+}
+
+.title {
+    cursor:default;
+  transform: translateX(-50%) rotate(-10deg);
+  display: block;
+  float: left;
+  left: 50%;
+  position: relative;
+}
+.title span {
+  transform: skew(-10deg);
+  display: block;
+  float: left;
+  text-shadow: #533d4a 1px 1px, #533d4a 2px 2px, #533d4a 3px 3px, #533d4a 4px 4px, #533d4a 5px 5px, #533d4a 6px 6px;
+  min-width: 10px;
+  min-height: 10px;
+  position: relative;
+}
+
+.title:nth-child(1) {
+  color: #e55643;
+}
+.title:nth-child(2) {
+  color: #2b9f5e;
+}
+.title:nth-child(3) {
+  color: #f1c83c;
+}
+@keyframes fadeOut {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  table,
+  th,
+  td {
+      
+      border: 1px solid black;
+      border-collapse: collapse;
+  }
+
+  th {
+      font-size: 10pt;
+  }
+
+  td {
+      width: 300px;
+      font-size: 8pt;
+      
+  }
+
+  #head_container {
+      width: 100%;
+      text-align: center;
+      padding: 30px 0 10px 0;
+  }
+
+  #section_container {
+      width: 100%;
+      text-align: center;
+      padding: 10px 0 10px 0;
+  }
+
+  #footer_container {
+      width: 1000px;
+  }
+
+  #inside_section_container {
+      width: 1300px;
+      text-align: center;
+      margin: 0 auto;
+      padding: 0 0 0 auto;
+  }
+  #inside_section_container_only_table{
+    width : 100%;
+    display : inline-block;
+  }
+  #clock {
+      text-align: left;
+      padding: 0 0 0 270px;
+  }
+
+  #section_table_2  {
+      width: 200px;
+      height : 300px;
+  }
+
+  #Title{
+    
+  }
+  .section_container_inside_table{
+    width : 1000px;
+    text-align : center;
+  }
+
+  .level_Color_0 {
+      color: #00ff2a;
+  }
+
+  .level_Color_1 {
+      color: #fffb00;
+  }
+
+  .level_Color_2 {
+      color: #ff9100;
+  }
+
+  .level_Color_3 {
+      color: #ff3300;
+  }
+
+  .level_Color_4 {
+      color: #5c0303;
+  }
+
+  .level_Color_5 {
+      color: #000000;
+  }
+

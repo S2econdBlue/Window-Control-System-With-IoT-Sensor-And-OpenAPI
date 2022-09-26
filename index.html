@@ -3,165 +3,558 @@
 
 <head>
     <meta charset="utf-8">
-
-    <title>currentWeather</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+    <script tpe="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/lettering.js/0.6.1/jquery.lettering.min.js"></script>
+    <script src="indexjs.js"></script>
+    <link rel="stylesheet" href="indexcss.css" type="text/css">
+    <title>current Weather</title>
+    <style>
+    </style>
 </head>
 
 <body>
-
-    <header>
-
+    <header id="head_container">
+        <div class="inner_container">
+            <div class="title_container">
+                <h1>
+                    <span class="title">아두이노 센서</span>
+                    <span class="title">공공데이터 API</span>
+                    <span class="title">불러오기</span>
+                </h1>
+            </div>
+        </div>
     </header>
+    <section id="section_container">
+        <div class="inner_container">
+            <div class="button">데이터 불러오기</div>
+            <span class="reload_weather"></span>
+            <br>
+            <span class="reload_Air_Pollution"></span>
+            <br>
+            <span class="reload_Arduino"></span>
+            <br>
+            <span class="reload_Time"></span>
+            <hr />
+            <br>
+            <h1 id="clock" style="color:gray; cursor:default;">00:00</h1><br>
+            <table id="section_table_1" style="width: 400px;margin:0 auto;">
+                <tr>
+                    <th></th>
+                    <th>공공데이터 측정값</th>
+                    <th>아두이노 센서 측정값</th>
+                </tr>
+                <tr>
+                    <td>강수형태</td>
+                    <td id='P1'></td>
+                    <td id='Rain_Type_Arduino'></td>
+                </tr>
+                <tr>
+                    <td>온도</td>
+                    <td id='P4'></td>
+                    <td id='Temperature_Arduino'></td>
+                </tr>
+                <tr>
+                    <td>풍속</td>
+                    <td id='P5'></td>
+                    <td id='Wind_Speed_Arduino'></td>
+                </tr>
+                <tr>
+                    <td>미세먼지</td>
+                    <td id='P6'></td>
+                    <td id='Air_Pollution_Arduino'></td>
+                </tr>
+            </table>
+        </div>
+        <!-----------------------------------------강우 상태 테이블----------------------------------------->
+        <div class="inner_container">
+            <div class="Compare_Rain_Type">
+                <span id="public_Data_Rain_Type_Pos"
+                    style="font-size : 8px; position : relative; right: 21%; top :20px">공공데이터→</span>
+                <span id="arduino_Rain_Type_Pos"
+                    style="font-size : 8px; position : relative; left:20%; top :20px">←아두이노</span>
+                <table id="section_table_0" style="width: 400px;margin:0 auto; border : rgba(255, 0, 0, .5)">
+                    <tr>
+                        <th colspan="2" style="width:18%">강수형태 등급</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="level_Color_0">비 안내림</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="level_Color_1">비</td>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_2">눈</td>
+                        <td style=" border : 0; "></td>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_3">소나기</td>
+                        <td style=" border : 0"></td>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_4">진눈깨비</td>
+                        <td style="border : 0"></td>
+                    </tr>
+                </table>
+            </div>
 
-    <section>
+            <!-----------------------------------------온도 테이블----------------------------------------->
+            <div id="Compare_Temperature">
+                <span id="public_Data_Temp_Pos"
+                    style="font-size : 8px; position : relative; right: 21%; top :20px">공공데이터→</span>
+                <span id="arduino_Temp_Pos"
+                    style="font-size : 8px; position : relative; left:20%; top :20px">←아두이노</span>
 
-        <button id="button">수동 API 로드</button>
-        <article>
-            <h1 id="clock" style="color:gray;">00:00</h1>
-            <p id='P1'></p>
-            <p id='P2'></p>
-            <p id='P3'></p>
-            <p id='P4'></p>
-            <p id='P5'></p>
-        </article>
+                <table id="section_table_1" style="width: 400px;margin:0 auto;">
+                    <tr>
+                        <th style="width:20%">등급</th>
+                        <th style="width:18%">온도(°C)</th>
+                    </tr>
+                    <tr>
+                        <td style="color :rgb(0, 167, 167)">저온</td>
+                        <td> ~ 16</td>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_0">적정온도</td>
+                        <td>17 ~ 29</td>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_3">고온</td>
+                        <td>30 ~ </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-----------------------------------------풍속 테이블----------------------------------------->
+            <div id="Compare_Wind_Speed">
+                <span id="public_Data_Wind_Pos"
+                    style="font-size : 8px; position : relative; right: 21%; top :20px">공공데이터→</span>
+                <span id="arduino_Wind_Pos"
+                    style="font-size : 8px; position : relative; left:20%; top :20px">←아두이노</span>
+
+                <table id="section_table_2" style="width: 400px; margin:0 auto;">
+                    <tr>
+                        <th style="width:20%">등급</th>
+                        <th style="width:18%;height:25px; font-size : 10px">바람 세기(m/s)</th>
+                        <th style="width:62%">해설</th>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_0">0등급</tㅇ>
+                        <td>0~0.2</td>
+                        <td>연기가 위로 똑바르게 올라가는 상태<p></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_1">1등급</td>
+                        <td>0.3~1.5</td>
+                        <td>연기가 날리는 것은 알 수 있으나, 바람개비로는 감지 불가</td>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_2">2등급</td>
+                        <td>1.6~3.3</td>
+                        <td>얼굴로 바람이 느껴지고 나뭇잎이 흔들리고 바람개비로 감지 가능</td>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_3">3등급</td>
+                        <td>3.4~5.4</td>
+                        <td>나뭇잎과 가는 가지가 쉴새 없이 흔들림<p></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_4">4등급</td>
+                        <td>5.5~7.9</td>
+                        <td>먼지가 일고 종이 조각이 날리며 작은 나뭇가지가 흔들리는 정도</td>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_5">5등급</td>
+                        <td>8~10.7</td>
+                        <td>잎이 무성한 작은 나무 전체가 흔들리고 강물에 잔물결이 일어남</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-----------------------------------------미세먼지 테이블----------------------------------------->
+            <div id="Compare_Air_Pollution">
+                <span id="public_Data_Air_Pos"
+                    style="font-size : 8px; position : relative; right: 21%; top :20px">공공데이터→</span>
+                <span id="arduino_Air_Pos"
+                    style="font-size : 8px; position : relative; left:20%; top :20px">←아두이노</span>
+
+                <table id="section_table_3" style="width: 400px;margin:0 auto;">
+                    <tr>
+                        <th style="width:11%">등급</th>
+                        <th style="width:27%; font-size : 6px">미세먼지 농도(㎍/㎥)<br>미세먼지 크기(10pm)</th>
+                        <th style="width:62%">해설</th>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_0">좋음</tㅇ>
+                        <td>0 ~ 30</td>
+                        <td>푸르고 화창하며 민감군에게도 실외 활동이 적합한 날씨</td>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_1">보통</td>
+                        <td>31 ~ 80</td>
+                        <td>민감군 : 실외활동 시 특별히 행동에 제약을 받을 필요는 없지만 몸 상태에 따라 유의하여 활동</td>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_2">나쁨</td>
+                        <td>81 ~ 150</td>
+                        <td>민감군 : 장시간, 무리한 실외활동 제한, 특히 천식을 앓고 있는 사람이 실외에 있는 경우 흡입기를 더 자주 사용할 필요가 있음<br>
+                            일반인 : 장시간, 무리한 실외활동 제한, 특히 눈과 목이 불편한 사람은 실외활동 추천하지 않음</td>
+                    </tr>
+                    <tr>
+                        <td class="level_Color_3">매우 나쁨</td>
+                        <td>151 ~ </td>
+                        <td>민감군 : 가급적 실내활동, 실외활동 시 의사와 상의<br>
+                            일반인 : 장시간, 무리한 실외활동 제한, 목의 통증과, 기침 등의 증상이 있다면 실외활동 피할 것
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </section>
     <footer>
+        <center>
+            <div id="footer_container">
 
+            </div>
+        </center>
     </footer>
+
     <script>
-        //실시간 시간 표시하기
-        var clockTarget = document.getElementById("clock");
-        var date = new Date();
-        var minutes = date.getMinutes();
-        function clock() {
-            
-            var date = new Date();
-            // date Object를 받아오고 
-            var month = date.getMonth();
-
-            // 달을 받아옵니다 
-            var clockDate = date.getDate();
-
-            // 몇일인지 받아옵니다 
-            var day = date.getDay();
-
-            // 요일을 받아옵니다. 
-            var week = ['일', '월', '화', '수', '목', '금', '토'];
-
-            // 요일은 숫자형태로 리턴되기때문에 미리 배열을 만듭니다. 
-            var hours = date.getHours();
-
-            // 시간을 받아오고 
-            var minutes = date.getMinutes();
-
-            // 분도 받아옵니다.
-            var seconds = date.getSeconds();
-
-            // 초까지 받아온후 
-            clockTarget.innerText = `${month + 1}월 ${clockDate}일 ${week[day]}요일` + `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
-
-            // 월은 0부터 1월이기때문에 +1일을 해주고 
-
-            // 시간 분 초는 한자리수이면 시계가 어색해보일까봐 10보다 작으면 앞에0을 붙혀주는 작업을 3항연산으로 했습니다. 
-        }
-
-
         //API로 공공데이터 불러오기
-        const button = document.getElementById("button");
         const header = document.querySelector('header');
         const section = document.querySelector('section');
         const footer = document.querySelector('footer');
+        //footer.appendChild(myPara1); querySelector 사용법
 
         const myPara1 = document.getElementById('P1');
-        const myPara2 = document.getElementById('P2');
         const myPara3 = document.getElementById('P3');
         const myPara4 = document.getElementById('P4');
         const myPara5 = document.getElementById('P5');
+        const myPara6 = document.getElementById('P6');
 
-        var xhr = new XMLHttpRequest();
+        const Para_Rain_Type_Arduino = document.getElementById('Rain_Type_Arduino');
+        const Para_Temperature_Arduino = document.getElementById('Temperature_Arduino');
+        const Para_Wind_Speed_Arduino = document.getElementById('Wind_Speed_Arduino');
+        const Para_Air_Pollution_Arduino = document.getElementById('Air_Pollution_Arduino');
+
+        var xhr1 = new XMLHttpRequest();
         function weather_Check() {
-            xhr.open("GET", "main.php");
-            xhr.send();
+            xhr1.open("GET", "get_weather.php");
+            xhr1.send();
+            $('.reload_weather').text('기상 데이터 불러오는 중...');
+            $(".reload_weather").lettering();
+            console_clock();
+            console.log("run xhr1.open & xhr1.send\n");
         }
-        function weather_Check_timely() {
-            if (minutes == 00 || minutes == 10 || minutes == 20 || minutes == 30 || minutes == 40 || minutes == 50 || minutes == 60) {
-                xhr.open("GET", "main.php");
-                xhr.send();
+        xhr1.onload = function () {
+            console_clock();
+            console.log("xhr1.onload readyState =" + xhr1.readyState + ", status = " + xhr1.status + "\n");
+            if (xhr1.readyState == 4 && xhr1.status == 200) {
+                const weather_data = xhr1.response;
+                if (weather_data != 0) {
+                    $('.reload_weather').text('미세먼지 API 데이터 불러오기 완료');
+                    $(".reload_weather").lettering();
+                    const weather_Parsed_Data = JSON.parse(weather_data);
+                    currentWeather(weather_Parsed_Data);
+                }
+                else {
+                    $('.reload_weather').text('기상 API 서버 에러 발생');
+                    $(".reload_weather").lettering();
+                }
             }
-        }
-        button.addEventListener('click', function show() {
-            xhr.open("GET", "main.php");
-            xhr.send();
-        });
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                console.log("\n정상적으로 응답 받음\n");
+            else {
+                $('.reload_weather').text('기상 데이터 불러오기 실패');
+                $(".reload_weather").lettering();
+                console_clock();
+                console.log("기상 데이터 불러오기 실패\n");
             }
-        });
-        xhr.onload = function () {
-            let weather_data = xhr.response;
-            console.log("\n", "weather_data : ", weather_data, "\n");
-            let parsed_data = JSON.parse(weather_data);
-
-            currentWeather(parsed_data);
         }
         function currentWeather(obj) {
             const item = obj.response.body.items.item;
             for (var i = 0; i < item.length; i++) {
-
-                const obser_V = item[i].obsrValue;
+                var obser_V = item[i].obsrValue;
                 const cat = item[i].category;
                 if (cat == "PTY") {
+                    var base_px_value = 35;
+                    var add_px_value = 18;
                     if (obser_V == 0) {
-                        myPara1.innerHTML = '강수형태 : 비 안내림';
+                        myPara1.innerHTML = '비 안내림';
+                        $('#public_Data_Rain_Type_Pos').css({ "position": "relative", "top": + base_px_value + "px" });
                     }
                     else if (obser_V == 1) {
-                        myPara1.innerHTML = '강수형태 : 비';
+                        myPara1.innerHTML = '비';
+                        $('#public_Data_Rain_Type_Pos').css({ "position": "relative", "top": + base_px_value + add_px_value * 1 + "px" });
                     }
-                    else if (obser_V == 2) {
-                        myPara1.innerHTML = '강수형태 : 강한 진눈깨비';
+                    else if (obser_V == 3 || obser_V == 7) {
+                        myPara1.innerHTML = '눈';
+                        $('#public_Data_Rain_Type_Pos').css({ "position": "relative", "top": + base_px_value + add_px_value * 2 + "px" });
                     }
-                    else if (obser_V == 3) {
-                        myPara1.innerHTML = '강수형태 : 눈';
+                    else if (obser_V == 4 || obser_V == 5) {
+                        myPara1.innerHTML = '소나기';
+                        $('#public_Data_Rain_Type_Pos').css({ "position": "relative", "top": + base_px_value + add_px_value * 3 + "px" });
                     }
-                    else if (obser_V == 4) {
-                        myPara1.innerHTML = '강수형태 : 소나기';
+                    else if (obser_V == 6 || obser_V == 2) {
+                        myPara1.innerHTML = '진눈깨비';
+                        $('#public_Data_Rain_Type_Pos').css({ "position": "relative", "top": + base_px_value + add_px_value * 4 + "px" });
                     }
-                    else if (obser_V == 5) {
-                        myPara1.innerHTML = '강수형태 : 빗방울';
-                    }
-                    else if (obser_V == 6) {
-                        myPara1.innerHTML = '강수형태 : 약한 진눈깨비';
-                    }
-                    else if (obser_V == 7) {
-                        myPara1.innerHTML = '강수형태 : 눈날림';
-                    }
-                }
-                else if (cat == "REH") {
-                    myPara2.innerHTML = '습도 : ' + obser_V + '%';
-                }
-                else if (cat == "RN1") {
-                    myPara3.innerHTML = '1시간 강수량 : ' + obser_V + 'mm';
                 }
                 else if (cat == "T1H") {
-                    myPara4.innerHTML = '온도 : ' + obser_V + '℃';
+                    myPara4.innerHTML = obser_V + '℃';
+                    var base_px_value = 18;
+                    var add_px_value = 18;
+                    if (obser_V <= 16)
+                        $('#public_Data_Temp_Pos').css({ "position": "relative", "top": + base_px_value + add_px_value * 1 + "px" });
+                    else if (obser_V <= 29)
+                        $('#public_Data_Temp_Pos').css({ "position": "relative", "top": + base_px_value + add_px_value * 2 + "px" });
+                    else
+                        $('#public_Data_Temp_Pos').css({ "position": "relative", "top": + base_px_value + add_px_value * 3 + "px" });
+                    //public_Data_Rain_Type_Pos arduino_Rain_Type_Pos
                 }
                 else if (cat == "WSD") {
-                    myPara5.innerHTML = '풍속 : ' + obser_V + 'm/s';
+                    myPara5.innerHTML = obser_V + 'm/s';
+                    var base_px_value = 55;
+                    var add_px_value = 45;
+                    if (obser_V <= 0.2)
+                        $('#public_Data_Wind_Pos').css({ "position": "relative", "top": + base_px_value + "px" });
+                    else if (obser_V <= 1.5)
+                        $('#public_Data_Wind_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 1 + "px" });
+                    else if (obser_V <= 3.3)
+                        $('#public_Data_Wind_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 2 + "px" });
+                    else if (obser_V <= 5.4)
+                        $('#public_Data_Wind_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 3 + "px" });
+                    else if (obser_V <= 7.9)
+                        $('#public_Data_Wind_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 4 + "px" });
+                    else if (obser_V <= 10.7)
+                        $('#public_Data_Wind_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 5 + "px" });
                 }
             }
         }
+        var xhr2 = new XMLHttpRequest();
+        function air_Pollution_Check() {
+            xhr2.open("GET", "get_Air_Pollution.php");
+            xhr2.send();
+            $('.reload_Air_Pollution').text('미세먼지 데이터 불러오는 중...');
+            $(".reload_Air_Pollution").lettering();
+            console_clock();
+            console.log("run xhr2.open & xhr2.send \n");
+        }
+        xhr2.onload = function () {
+            console_clock();
+            console.log("xhr2.onload readyState =" + xhr2.readyState + ", status =" + xhr2.status + "\n");
+            if (xhr2.readyState == 4 && xhr2.status == 200) {
+                let Air_Pollution = xhr2.response;
+                if (Air_Pollution != 0) {
+                    $('.reload_Air_Pollution').text('미세먼지 API 데이터 불러오기 완료');
+                    $(".reload_Air_Pollution").lettering();
+                    let Air_Pollution_Parsed_Data = JSON.parse(Air_Pollution);
+                    current_Air_Pollution(Air_Pollution_Parsed_Data);
+                }
+                else {
+                    $('.reload_Air_Pollution').text('미세먼지 API 서버 에러 발생');
+                    $(".reload_Air_Pollution").lettering();
+                }
+            }
+            else {
+                $('.reload_Air_Pollution').text('미세먼지 API 데이터 불러오기 실패');
+                $(".reload_Air_Pollution").lettering();
+                console_clock();
+                console.log("미세먼지 API 불러오기 실패\n");
+            }
+        }
+
+        function current_Air_Pollution(obj) {
+            const item = obj.response.body.items[0];
+            const pm10Value = item.pm10Value;
+            myPara6.innerHTML = pm10Value + "㎍/㎥";
+
+            var base_px_value = 30;
+            var add_px_value = 55;
+            if (pm10Value <= 30)
+                $('#public_Data_Air_Pos').css({ "position": "relative", "top": + base_px_value + "px" });
+            else if (pm10Value <= 80)
+                $('#public_Data_Air_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 1 + "px" });
+            else if (pm10Value <= 150)
+                $('#public_Data_Air_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 2 + "px" });
+            else
+                $('#public_Data_Air_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 2 + "px" });
+        }
+
+        const xhr3 = new XMLHttpRequest();
+        function get_Arduino() {
+            xhr3.open("GET", "get_Arduino.php");
+            xhr3.send();
+            $('.reload_Arduino').text('아두이노 데이터 로딩중...');
+            $(".reload_Arduino").lettering();
+            console_clock();
+            console.log("run xhr3.open & xhr3.send \n");
+        }
+        xhr3.onload = function () {
+
+            console_clock();
+            console.log("xhr3.onload readyState =" + xhr3.readyState + ", status =" + xhr3.status + "\n");
+            if (xhr3.readyState == 4 && xhr3.status == 200) {
+                $('.reload_Arduino').text('아두이노 데이터 불러오기 완료');
+                $(".reload_Arduino").lettering();
+                let Arduino = xhr3.response;
+                if (Arduino != 0) {
+                    $('.reload_Arduino').text('아두이노 센서 데이터 불러오기 완료');
+                    $(".reload_Arduino").lettering();
+                    let Arduino_Parsed_Data = JSON.parse(Arduino);
+                    console.log("Arduino Sensor Data after parsed : " + Arduino);
+                    current_Arduino(Arduino_Parsed_Data);
+                }
+                else {
+                    $('.reload_Arduino').text('아두이노 보드 연결 에러 발생');
+                    $(".reload_Arduino").lettering();
+                }
+
+            }
+            else {
+                $('.reload_Arduino').text('아두이노 데이터 불러오기 실패');
+                $(".reload_Arduino").lettering();
+                console_clock();
+                console.log("아두이노 데이터 불러오기 실패\n");
+            }
+        }
+        function current_Arduino(obj) {
+            const item = obj.response;
+            Para_Air_Pollution_Arduino.innerHTML = item.AirPollution10 + "㎍/㎥";
+            var base_px_value = 30;
+            var add_px_value = 55;
+            if (item.AirPollution10 <= 30)
+                $('#arduino_Air_Pos').css({ "position": "relative", "top": + base_px_value + "px" });
+            else if (item.AirPollution10 <= 80)
+                $('#arduino_Air_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 1 + "px" });
+            else if (item.AirPollution10 <= 150)
+                $('#arduino_Air_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 2 + "px" });
+            else
+                $('#arduino_Air_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 2 + "px" });
+
+            Para_Temperature_Arduino.innerHTML = item.Temperature + "℃";
+            var base_px_value = 18;
+            var add_px_value = 18;
+            if (item.Temperature <= 16)
+                $('#arduino_Temp_Pos').css({ "position": "relative", "top": + base_px_value + add_px_value * 1 + "px" });
+            else if (item.Temperature <= 29)
+                $('#arduino_Temp_Pos').css({ "position": "relative", "top": + base_px_value + add_px_value * 2 + "px" });
+            else
+                $('#arduino_Temp_Pos').css({ "position": "relative", "top": + base_px_value + add_px_value * 3 + "px" });
+
+            Para_Wind_Speed_Arduino.innerHTML = item.WindSpeed.toFixed(1) + "m/s";
+            var base_px_value = 55;
+            var add_px_value = 45;
+            if (item.WindSpeed.toFixed(1) <= 0.2)
+                $('#arduino_Wind_Pos').css({ "position": "relative", "top": + base_px_value + "px" });
+            else if (item.WindSpeed.toFixed(1) <= 1.5)
+                $('#arduino_Wind_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 1 + "px" });
+            else if (item.WindSpeed.toFixed(1) <= 3.3)
+                $('#arduino_Wind_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 2 + "px" });
+            else if (item.WindSpeed.toFixed(1) <= 5.4)
+                $('#arduino_Wind_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 3 + "px" });
+            else if (item.WindSpeed.toFixed(1) <= 7.9)
+                $('#arduino_Wind_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 4 + "px" });
+            else if (item.WindSpeed.toFixed(1) <= 10.7)
+                $('#arduino_Wind_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 5 + "px" });
+            var base_px_value = 35;
+            var add_px_value = 18;
+            if (item.RainCheck == 0) {
+                Para_Rain_Type_Arduino.innerHTML = "비 안내림";
+                $('#arduino_Rain_Type_Pos').css({ "position": "relative", "top": + base_px_value + "px" });
+            }
+            else {
+                Para_Rain_Type_Arduino.innerHTML = "비";
+                $('#arduino_Rain_Type_Pos').css({ "position": "relative", "top": + base_px_value + add_px_value * 1 + "px" });
+            }
+        }
+
+        function clock() {
+            //실시간 시간 표시하기
+            var clockTarget = document.getElementById("clock");
+            var date = new Date();
+            // date Object를 받아오고 
+            var year = date.getFullYear();
+            var month = date.getMonth();
+            // 달을 받아옵니다 
+            var clockDate = date.getDate();
+            // 몇일인지 받아옵니다 
+            var day = date.getDay();
+            // 요일을 받아옵니다. 
+            var week = ['일', '월', '화', '수', '목', '금', '토'];
+            // 요일은 숫자형태로 리턴되기때문에 미리 배열을 만듭니다. 
+            var hours = date.getHours();
+            // 시간을 받아오고 
+            var minutes = date.getMinutes();
+            // 분도 받아옵니다.
+            var seconds = date.getSeconds();
+            // 초까지 받아온후 
+            clockTarget.innerText = `${month + 1}월 ${clockDate}일 ${week[day]}요일 ` + `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+            // 월은 0부터 1월이기때문에 +1일을 해주고 
+            // 시간 분 초는 한자리수이면 시계가 어색해보일까봐 10보다 작으면 앞에0을 붙혀주는 작업을 3항연산으로 했습니다. 
+
+            if ((minutes == 00 || minutes == 10 || minutes == 20 || minutes == 30 || minutes == 40 || minutes == 50 || minutes == 60) && (seconds == 00 || seconds == 10 || seconds == 20 || seconds == 30 || seconds == 40 || seconds == 50 || seconds == 60)) {
+                weather_Check();
+                air_Pollution_Check();
+                get_Arduino();
+                $('.reload_Time').text(`마지막 업데이트 : ${month + 1}월 ${clockDate}일 ${week[day]}요일 ` + `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`);
+            }
+        }
+
+        function console_clock() {
+            //실시간 시간 표시하기
+            var clockTarget = document.getElementById("clock");
+            var date = new Date();
+            // date Object를 받아오고 
+            var year = date.getFullYear();
+            var month = date.getMonth();
+            // 달을 받아옵니다 
+            var clockDate = date.getDate();
+            // 몇일인지 받아옵니다 
+            var day = date.getDay();
+            // 요일을 받아옵니다. 
+            var week = ['일', '월', '화', '수', '목', '금', '토'];
+            // 요일은 숫자형태로 리턴되기때문에 미리 배열을 만듭니다. 
+            var hours = date.getHours();
+            // 시간을 받아오고 
+            var minutes = date.getMinutes();
+            // 분도 받아옵니다.
+            var seconds = date.getSeconds();
+            // 초까지 받아온후 
+            console.log(year + '/' + (month + 1) + '/' + clockDate + ' _ ' + hours + ':' + minutes + ':' + seconds);
+            $('.reload_Time').text(`마지막 업데이트 : ${month + 1}월 ${clockDate}일 ${week[day]}요일 ` + `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`);
+        }
+        $(".button").click(
+            function () {
+                weather_Check();
+                air_Pollution_Check();
+                get_Arduino();
+
+                var title1 = new TimelineMax();
+
+                title1.to(".reload_weather", 0, { visibility: 'hidden', opacity: 0 });
+                title1.to(".reload_weather", 0.4, { visibility: 'visible', opacity: 1 });
+                title1.to(".reload_Air_Pollution", 0, { visibility: 'hidden', opacity: 0 });
+                title1.to(".reload_Air_Pollution", 0.4, { visibility: 'visible', opacity: 1 });
+                title1.to(".reload_Arduino", 0, { visibility: 'hidden', opacity: 0 });
+                title1.to(".reload_Arduino", 0.4, { visibility: 'visible', opacity: 1 });
+                title1.to(".reload_Time", 0, { visibility: 'hidden', opacity: 0 });
+                title1.to(".reload_Time", 0.4, { visibility: 'visible', opacity: 1 });
+            });
 
         function init() {
             clock();
             weather_Check();
+            air_Pollution_Check();
+            get_Arduino();
             // 최초에 함수를 한번 실행시켜주고 
             setInterval(clock, 1000);
-            setInterval(weather_Check_timely, 20000); //1초마다 하면 트래픽 부족 우려. 59
             // setInterval이라는 함수로 매초마다 실행을 해줍니다.
             // setInterval은 첫번째 파라메터는 함수이고 두번째는 시간인데 밀리초단위로 받습니다. 1000 = 1초 
         }
         init();
+
     </script>
 </body>
 
